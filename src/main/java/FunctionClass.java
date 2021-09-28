@@ -1,59 +1,44 @@
-import java.math.BigDecimal;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class FunctionClass {
 
-    private final List<Integer> randomInts;
-
-    public FunctionClass(Integer startBound, Integer endBound) {
-        RandomGenerator randomGenerator = new RandomGenerator();
-        this.randomInts = IntStream.range(0, 10)
-                .map(value -> randomGenerator.getRandomBetween(startBound, endBound))
-                .boxed()
-                .collect(Collectors.toList());
+    public double average(List<Double> ints) {
+        return ints.stream().mapToDouble(Double::doubleValue).sum() / ints.size();
     }
 
-    public FunctionClass(List<Integer> list) {
-        this.randomInts = list;
-    }
+    public Double dispersion(List<Double> ints) {
+        double average = average(ints);
 
-    public double average() {
-        return randomInts.stream().mapToDouble(Integer::doubleValue).sum() / randomInts.size();
-    }
-
-    public BigDecimal dispersion() {
-        double average = average();
-
-        return BigDecimal.valueOf(randomInts.stream()
+        return ints.stream()
                 .mapToDouble(xK -> Math.pow(xK - average, 2))
-                .sum() / randomInts.size());
+                .sum() / ints.size();
     }
 
-    public double standardDeviation() {
-        return Math.sqrt(dispersion().doubleValue());
+    public double standardDeviation(List<Double> ints) {
+        return Math.sqrt(dispersion(ints));
     }
 
-    public Double rootMeanSquareError() {
-        return Math.sqrt(randomInts.stream()
+    public Double rootMeanSquareError(List<Double> ints) {
+        return Math.sqrt(ints.stream()
                 .mapToDouble(xK -> Math.pow(xK, 2))
-                .sum() / randomInts.size());
+                .sum() / ints.size());
     }
 
-    public Double asymmetry() {
-        double average = average();
+    public Double asymmetry(List<Double> ints) {
+        double average = average(ints);
 
-        return (randomInts.stream()
+        return (ints.stream()
                 .mapToDouble(xK -> Math.pow(xK - average, 3))
-                .sum() / randomInts.size()) / Math.pow(standardDeviation(), 3);
+                .sum() / ints.size()) / Math.pow(standardDeviation(ints), 3);
     }
 
-    public Double excess() {
-        double average = average();
+    public Double excess(List<Double> ints) {
+        double average = average(ints);
 
-        return (randomInts.stream()
+        return (ints.stream()
                 .mapToDouble(xK -> Math.pow(xK - average, 4))
-                .sum() / randomInts.size()) / Math.pow(standardDeviation(), 4) - 3;
+                .sum() / ints.size()) / Math.pow(standardDeviation(ints), 4) - 3;
     }
 }

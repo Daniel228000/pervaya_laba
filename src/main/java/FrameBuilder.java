@@ -12,7 +12,7 @@ public class FrameBuilder {
 
     public void buildFrame() {
         JFrame frame = new JFrame();
-        frame.setLayout(new GridLayout(1, charts.size()));
+        frame.setLayout(new GridLayout(2, charts.size()));
         for (Chart chart : charts) {
             ChartPanel chartPanel = new ChartPanel(chart.buildChart());
             frame.getContentPane()

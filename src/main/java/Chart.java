@@ -28,7 +28,7 @@ public class Chart {
 
     public JFreeChart buildChart() {
         XYSeries series = new XYSeries(title.split("=")[1]);
-        for(double i = startX; i <= endX; i+=stepX){
+        for(double i = startX; i <= endX; i+=stepX) {
             series.add(i, function.apply(i));
         }
 

@@ -1,59 +1,56 @@
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Main {
     public static void main(String[] args) {
-        /*RandomFunction randomFunction = new RandomFunction();
-        System.out.println(randomFunction.nextInt(5));*/
 
+    }
 
-        /*int startBound = 5;
-        int endBound = 10;
-        FunctionClass functionClass = new FunctionClass(startBound, endBound);
-        System.out.printf("Average of list of numbers in range [%d - %d] = %f%n",
-                startBound, endBound, functionClass.average());
-        System.out.printf("Dispersion of list of numbers in range [%d - %d] = %f%n",
-                startBound, endBound, functionClass.dispersion());
-        System.out.printf("StandardDeviation of list of numbers in range [%d - %d] = %f%n",
-                startBound, endBound, functionClass.standardDeviation());
-        System.out.printf("RootMeanSquareError of list of numbers in range [%d - %d] = %f%n",
-                startBound, endBound, functionClass.rootMeanSquareError());
-        System.out.printf("Asymmetry of list of numbers in range [%d - %d] = %f%n",
-                startBound, endBound, functionClass.asymmetry());
-        System.out.printf("Excess of list of numbers in range [%d - %d] = %f%n",
-                startBound, endBound, functionClass.excess());*/
+    public static void checkStationarity(int sizeOfGroup) {
+        RandomGenerator randomGenerator = new RandomGenerator();
+        FunctionClass functionClass = new FunctionClass();
+        StationarityChecker stationarityChecker = new StationarityChecker(randomGenerator, functionClass);
+        boolean isStationar = stationarityChecker.checkStationarity(sizeOfGroup);
+        System.out.println(isStationar ? "Group is stationar" : "Group is not stationar");
+    }
 
-        List<Integer> list = new ArrayList<>(Arrays.asList(5,6,7,8,9,10));
-        FunctionClass functionClass = new FunctionClass(list);
-        System.out.println("Average= " + functionClass.average());
-        System.out.println("Dispersion= " + functionClass.dispersion());
-        System.out.println("StandardDeviation= " + functionClass.standardDeviation());
-        System.out.println("RootMeanSquareError= " + functionClass.rootMeanSquareError());
-        System.out.println("Asymmetry= " + functionClass.asymmetry());
-        System.out.println("Excess= " + functionClass.excess());
-
-
-        /*Chart direct = Chart.builder()
+    public static void buildCharts() {
+        Chart direct = Chart.builder()
                 .title("y = kx + b")
                 .startX(-5F)
                 .endX(5F)
                 .stepX(1F)
                 .function(x -> 2 * x + 3).build();
 
-        Chart direct1 = Chart.builder()
-                .title("y = kx + b")
+        Chart abs = Chart.builder()
+                .title("y = |x|")
                 .startX(-5F)
                 .endX(5F)
                 .stepX(1F)
-                .function(x -> -7 * x + 3).build();
+                .function(Math::abs).build();
 
-        Chart direct2 = Chart.builder()
-                .title("y = kx + b")
+        Chart sqrt = Chart.builder()
+                .title("y = sqrt(x)")
+                .startX(0F)
+                .endX(10F)
+                .stepX(1F)
+                .function(Math::sqrt).build();
+
+        Chart parabola = Chart.builder()
+                .title("y = -x^2")
                 .startX(-5F)
                 .endX(5F)
                 .stepX(1F)
-                .function(x -> 5 * x + 3).build();
+                .function(x -> -Math.pow(x, 2)).build();
+
+        Chart hyperbola = Chart.builder()
+                .title("y = x^3")
+                .startX(-5F)
+                .endX(5F)
+                .stepX(1F)
+                .function(x -> 2 * Math.pow(x, 3)).build();
 
         Chart exponent = Chart.builder()
                 .title("y = b * exp(-a * x)")
@@ -63,7 +60,22 @@ public class Main {
                 .function(x -> 2 * Math.exp(-3 * x)).build();
 
 
-        FrameBuilder frameBuilder = new FrameBuilder(Arrays.asList(direct, direct1, direct2, exponent));
-        frameBuilder.buildFrame();*/
+        FrameBuilder frameBuilder = new FrameBuilder(Arrays.asList(direct, abs, sqrt, parabola, hyperbola, exponent));
+        frameBuilder.buildFrame();
+    }
+
+    public static void checkFunctions() {
+        RandomGenerator randomGenerator = new RandomGenerator();
+        List<Double> randomDoubles = IntStream.range(0, 10)
+                .mapToDouble(value -> randomGenerator.nextDoubleInclusive())
+                .boxed()
+                .collect(Collectors.toList());
+        FunctionClass functionClass = new FunctionClass();
+        System.out.println("Average= " + functionClass.average(randomDoubles));
+        System.out.println("Dispersion= " + functionClass.dispersion(randomDoubles));
+        System.out.println("StandardDeviation= " + functionClass.standardDeviation(randomDoubles));
+        System.out.println("RootMeanSquareError= " + functionClass.rootMeanSquareError(randomDoubles));
+        System.out.println("Asymmetry= " + functionClass.asymmetry(randomDoubles));
+        System.out.println("Excess= " + functionClass.excess(randomDoubles));
     }
 }
