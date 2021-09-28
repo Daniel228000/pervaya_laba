@@ -14,7 +14,7 @@ import java.util.function.Function;
 
 @Data
 @Builder
-public class Chart{
+public class Chart {
 
     private String title;
 
@@ -26,7 +26,7 @@ public class Chart{
 
     private Function<Double, Double> function;
 
-    public JFreeChart getChart() {
+    public JFreeChart buildChart() {
         XYSeries series = new XYSeries(title.split("=")[1]);
         for(double i = startX; i <= endX; i+=stepX){
             series.add(i, function.apply(i));
